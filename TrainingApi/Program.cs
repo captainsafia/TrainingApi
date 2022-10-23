@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TrainingApi.Shared; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ builder.Services
     .AddDbContext<TrainingDb>(options => options.UseInMemoryDatabase("training"));
 
 builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
