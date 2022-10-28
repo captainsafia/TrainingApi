@@ -4,7 +4,11 @@ namespace TrainingApi.Shared;
 
 public class TrainingDb : DbContext
 {
+    // Parameterless constructor to support mocking in unit tests
+    public TrainingDb() { }
     public TrainingDb(DbContextOptions options) : base(options) { }
-    public DbSet<Client> Clients { get; set; }
-    public DbSet<Trainer> Trainers { get; set; }
+
+    // Virtual DbSets to support mocking in unit tests
+    public virtual DbSet<Client> Clients { get; set; }
+    public virtual DbSet<Trainer> Trainers { get; set; }
 }

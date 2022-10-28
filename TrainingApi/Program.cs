@@ -8,6 +8,7 @@ builder.Services
 
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorization();
+builder.Services.AddScoped<TrainingService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -33,21 +34,9 @@ var clients = app.MapGroup("/clients/{id}")
     })
     .WithOpenApi();
 
-clients.MapGet("/", async (int id, TrainingDb db) =>
-{
-    var client = await db.Clients.FindAsync(id);
-    return client is null ? Results.NotFound() : Results.Ok(client);
-})
-.Produces<Client>();
-
-clients.MapPut("/", async (int id, TrainingDb db, Client updatedClient) =>
-{
-    var client = await db.Clients.FindAsync(id);
-    if (client is null) return Results.NotFound();
-    client = updatedClient;
-    await db.SaveChangesAsync();
-    return Results.Created($"/clients/{client.Id}", client);
-})
+clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id));
+clients.MapPut("", (int id, Client updatedClient, TrainingService service)
+    => service.UpdateClientById(id, updatedClient))
 .AddEndpointFilter(async (context, next) => {
     var client = context.GetArgument<Client>(2);
     if (client.FirstName.Any(char.IsDigit) || client.LastName.Any(char.IsDigit))
@@ -61,16 +50,11 @@ var trainers = app.MapGroup("/trainers")
     .RequireAuthorization()
     .WithOpenApi();
 
-trainers.MapGet("/", (TrainingDb db) => Results.Ok(db.Trainers));
-
-trainers.MapPut("/{id}", async (int id, TrainingDb db, Trainer updatedTrainer) =>
-{
-    var trainer = await db.Trainers.FindAsync(id);
-    if (trainer is null) return Results.NotFound();
-    trainer = updatedTrainer;
-    await db.SaveChangesAsync();
-    return Results.Created($"/trainers/{trainer.Id}", trainer);
-})
-.RequireAuthorization(p => p.RequireClaim("is_elite", "true"));
+trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
+trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
+    service.UpdateTrainerById(id, updatedTrainer))
+    .RequireAuthorization(p => p.RequireClaim("is_elite", "true"));
+trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));
+trainers.MapPost("/", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer));
 
 app.Run();
