@@ -23,16 +23,15 @@ if (app.Environment.IsDevelopment())
 
 app.InitializeDatabase();
 
-app.MapGet("/clients/{id}", (int id, TrainingService service) => service.GetClientById(id))
-    .AddEndpointFilterFactory(RequestAuditor)
-    .WithOpenApi();
+var openApiGroup = app.MapGroup("").WithOpenApi();
+var clients = openApiGroup.MapGroup("/clients/{id}").AddEndpointFilterFactory(RequestAuditor);
+var trainers = openApiGroup.MapGroup("/trainers").RequireAuthorization();
 
-app.MapPut("/clients/{id}", (int id, Client updatedClient, TrainingService service) =>
+clients.MapGet("/", (int id, TrainingService service) => service.GetClientById(id));
+clients.MapPut("/", (int id, Client updatedClient, TrainingService service) =>
     {
         return service.UpdateClientById(id, updatedClient);
     })
-    .AddEndpointFilterFactory(RequestAuditor)
-    .WithOpenApi()
     .AddEndpointFilter(async (context, next) =>
     {
         var client = context.GetArgument<Client>(2);
@@ -43,24 +42,15 @@ app.MapPut("/clients/{id}", (int id, Client updatedClient, TrainingService servi
         return await next(context);
     });
 
-app.MapGet("/trainers", (TrainingService service) => service.GetTrainers())
-    .RequireAuthorization()
-    .WithOpenApi();
-
-app.MapPut("/trainers/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
+trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
+trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
     {
         return service.UpdateTrainerById(id, updatedTrainer);
     })
-    .WithOpenApi()
     .RequireAuthorization(p => p.RequireClaim("is_elite", "true"));
 
-app.MapDelete("/trainers/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id))
-    .RequireAuthorization()
-    .WithOpenApi();
-
-app.MapPost("/trainers", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer))
-    .RequireAuthorization()
-    .WithOpenApi();
+trainers.MapDelete("{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));
+trainers.MapPost("/", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer));
 
 app.Run();
 
