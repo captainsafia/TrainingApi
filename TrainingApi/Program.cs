@@ -23,38 +23,54 @@ if (app.Environment.IsDevelopment())
 
 app.InitializeDatabase();
 
-var clients = app.MapGroup("/clients/{id}")
-    .AddEndpointFilterFactory((handlerContext, next) => {
-        var loggerFactory = handlerContext.ApplicationServices.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("RequestAuditor");
-        return (invocationContext) => {
-            logger.LogInformation($"[⚙️] Received a request for: {invocationContext.HttpContext.Request.Path}");
-            return next(invocationContext);
-        };
-    })
+app.MapGet("/clients/{id}", (int id, TrainingService service) => service.GetClientById(id))
+    .AddEndpointFilterFactory(RequestAuditor)
     .WithOpenApi();
 
-clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id));
-clients.MapPut("", (int id, Client updatedClient, TrainingService service)
-    => service.UpdateClientById(id, updatedClient))
-.AddEndpointFilter(async (context, next) => {
-    var client = context.GetArgument<Client>(2);
-    if (client.FirstName.Any(char.IsDigit) || client.LastName.Any(char.IsDigit))
+app.MapPut("/clients/{id}", (int id, Client updatedClient, TrainingService service) =>
     {
-        return Results.Problem("Names cannot contain any numeric characters.", statusCode: 400);
-    }
-    return await next(context);
-});
+        return service.UpdateClientById(id, updatedClient);
+    })
+    .AddEndpointFilterFactory(RequestAuditor)
+    .WithOpenApi()
+    .AddEndpointFilter(async (context, next) =>
+    {
+        var client = context.GetArgument<Client>(2);
+        if (client.FirstName.Any(char.IsDigit) || client.LastName.Any(char.IsDigit))
+        {
+            return Results.Problem("Names cannot contain any numeric characters.", statusCode: 400);
+        }
+        return await next(context);
+    });
 
-var trainers = app.MapGroup("/trainers")
+app.MapGet("/trainers", (TrainingService service) => service.GetTrainers())
     .RequireAuthorization()
     .WithOpenApi();
 
-trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
-trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
-    service.UpdateTrainerById(id, updatedTrainer))
+app.MapPut("/trainers/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
+    {
+        return service.UpdateTrainerById(id, updatedTrainer);
+    })
+    .WithOpenApi()
     .RequireAuthorization(p => p.RequireClaim("is_elite", "true"));
-trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));
-trainers.MapPost("/", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer));
+
+app.MapDelete("/trainers/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id))
+    .RequireAuthorization()
+    .WithOpenApi();
+
+app.MapPost("/trainers", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer))
+    .RequireAuthorization()
+    .WithOpenApi();
 
 app.Run();
+
+static EndpointFilterDelegate RequestAuditor(EndpointFilterFactoryContext handlerContext, EndpointFilterDelegate next)
+{
+    var loggerFactory = handlerContext.ApplicationServices.GetRequiredService<ILoggerFactory>();
+    var logger = loggerFactory.CreateLogger("RequestAuditor");
+    return (invocationContext) =>
+    {
+        logger.LogInformation($"[⚙️] Received a request for: {invocationContext.HttpContext.Request.Path}");
+        return next(invocationContext);
+    };
+};
