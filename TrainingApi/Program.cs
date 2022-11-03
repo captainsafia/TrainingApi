@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using TrainingApi.Shared; 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,11 +8,16 @@ builder.Services
     .AddDbContext<TrainingDb>(options => options.UseInMemoryDatabase("training"));
 
 builder.Services.AddAuthentication().AddJwtBearer();
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
+    policy.RequireRole("trainer").RequireClaim("permission", "admin"));
+
 builder.Services.AddScoped<TrainingService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
+    opts.InferSecuritySchemes = true;
+});
 
 var app = builder.Build();
 
@@ -47,13 +53,12 @@ clients.MapPut("", (int id, Client updatedClient, TrainingService service)
 });
 
 var trainers = app.MapGroup("/trainers")
-    .RequireAuthorization()
-    .WithOpenApi();
+    .RequireAuthorization("trainer_access")
+    .EnableOpenApiWithAuthentication();
 
 trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
 trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
-    service.UpdateTrainerById(id, updatedTrainer))
-    .RequireAuthorization(p => p.RequireClaim("is_elite", "true"));
+    service.UpdateTrainerById(id, updatedTrainer));
 trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));
 trainers.MapPost("/", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer));
 
