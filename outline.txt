@@ -1,0 +1,11 @@
+# .NET Conf Talk flow
+
+- Endpoint filters
+- Use request auditor on all routes (MapGroup)
+  - DRY
+  (Can we use this for auth)
+- User-jwts
+- IEndpointMetadataProvider
+  - XML IResult
+  (TypedResults are required for default metadata)
+- Testing
