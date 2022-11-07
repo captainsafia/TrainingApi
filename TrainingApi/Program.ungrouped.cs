@@ -14,7 +14,10 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
 builder.Services.AddScoped<TrainingService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(swaggerOptions =>
+{
+    swaggerOptions.OperationFilter<XmlOperationFilter>();
+});
 builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
     opts.InferSecuritySchemes = true;
 });
