@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using TrainingApi.Shared;
@@ -13,7 +14,7 @@ public class UnitTests
     public void CreateClientReturnsCorrectResponse()
     {
         // Arrange
-        var clientToCreate = new Client(4, "Gretchen", "Beslier", "gbeslier0@nba.com", 311, 65, DateTime.Parse("7/22/1984"));
+        var clientToCreate = new Client(4, "Gretchen", "Beslier", "gbeslier0@nba.com", 311, 65, DateTime.Parse("7/22/1984", CultureInfo.InvariantCulture));
         var mockContext = CreateMockDbContext();
         var service = new TrainingService(mockContext.Object);
 
@@ -30,9 +31,9 @@ public class UnitTests
     {
         var clients = new List<Client>
         {
-            new Client(1, "Vonnie", "Mawer", "vmawer0@go.com", 149, 66, DateTime.Parse("4/24/2000")),
-            new Client(2, "Langston", "Feldberg", "lfeldberg1@hc360.com", 329, 73, DateTime.Parse("10/20/1982")),
-            new Client(3, "Olwen", "Maeer", "omaeer3@purevolume.com", 261, 70, DateTime.Parse("8/22/1993")) 
+            new Client(1, "Vonnie", "Mawer", "vmawer0@go.com", 149, 66, DateTime.Parse("4/24/2000", CultureInfo.InvariantCulture)),
+            new Client(2, "Langston", "Feldberg", "lfeldberg1@hc360.com", 329, 73, DateTime.Parse("10/20/1982", CultureInfo.InvariantCulture)),
+            new Client(3, "Olwen", "Maeer", "omaeer3@purevolume.com", 261, 70, DateTime.Parse("8/22/1993", CultureInfo.InvariantCulture)) 
         }.AsQueryable();
         var trainers = new List<Trainer>
         {
