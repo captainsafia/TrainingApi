@@ -25,4 +25,8 @@
     <InternalsVisibleTo Include="TrainingApi.Tests" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Program.ungrouped.cs" />
+  </ItemGroup>
+
 </Project>
