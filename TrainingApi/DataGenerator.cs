@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using TrainingApi.Shared;
 
@@ -13,9 +14,9 @@ public static class DataGenerator
             return app;
         }
 
-        var clientA = new Client(1, "Vonnie", "Mawer", "vmawer0@go.com", 149, 66, DateTime.Parse("4/24/2000"));
-        var clientB = new Client(2, "Langston", "Feldberg", "lfeldberg1@hc360.com", 329, 73, DateTime.Parse("10/20/1982"));
-        var clientC = new Client(3, "Olwen", "Maeer", "omaeer3@purevolume.com", 261, 70, DateTime.Parse("8/22/1993"));
+        var clientA = new Client(1, "Vonnie", "Mawer", "vmawer0@go.com", 149, 66, DateTime.Parse("4/24/2000", CultureInfo.InvariantCulture));
+        var clientB = new Client(2, "Langston", "Feldberg", "lfeldberg1@hc360.com", 329, 73, DateTime.Parse("10/20/1982", CultureInfo.InvariantCulture));
+        var clientC = new Client(3, "Olwen", "Maeer", "omaeer3@purevolume.com", 261, 70, DateTime.Parse("8/22/1993", CultureInfo.InvariantCulture));
 
         context.Clients.AddRange(
             clientA,
