@@ -13,19 +13,23 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
 
 builder.Services.AddScoped<TrainingService>();
 
+#if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
     opts.InferSecuritySchemes = true;
 });
+#endif
 
 var app = builder.Build();
 
+#if DEBUG
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+#endif
 
 app.InitializeDatabase();
 
@@ -52,8 +56,12 @@ clients.MapPut("", (int id, Client updatedClient, TrainingService service)
 });
 
 var trainers = app.MapGroup("/trainers")
+#if DEBUG
     .RequireAuthorization("trainer_access")
     .EnableOpenApiWithAuthentication();
+#else
+    .RequireAuthorization("trainer_access");
+#endif
 
 trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
 trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
