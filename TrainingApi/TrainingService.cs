@@ -59,10 +59,10 @@ public class TrainingService
         return TypedResults.Created($"/trainers/{trainer.Id}", trainer);
     }
 
-    public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers()
+    public async Task<Ok<List<Trainer>>> GetTrainers()
     {
         var trainers = await _db.Trainers.ToListAsync();
-        return Results.Extensions.Xml(trainers);
+        return TypedResults.Ok(trainers);
     }
 
     public async Task<Results<Ok<Trainer>, NotFound>> DeleteTrainerById(int id)

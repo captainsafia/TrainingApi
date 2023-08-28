@@ -14,10 +14,7 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
 builder.Services.AddScoped<TrainingService>();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(swaggerOptions =>
-{
-    swaggerOptions.OperationFilter<XmlOperationFilter>();
-});
+builder.Services.AddSwaggerGen();
 builder.Services.Configure<SwaggerGeneratorOptions>(opts => {
     opts.InferSecuritySchemes = true;
 });
@@ -40,8 +37,7 @@ var clients = app.MapGroup("/clients/{id}")
             logger.LogInformation($"[⚙️] Received a request for: {invocationContext.HttpContext.Request.Path}");
             return next(invocationContext);
         };
-    })
-    .WithOpenApi();
+    });
 
 clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id));
 clients.MapPut("", (int id, Client updatedClient, TrainingService service)
