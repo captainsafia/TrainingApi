@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TrainingApi.Shared; 
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateSlimBuilder(args);
 
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
