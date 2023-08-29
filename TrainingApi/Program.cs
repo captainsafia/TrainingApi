@@ -10,6 +10,11 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
 
 builder.Services.AddScoped<TrainingService>();
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
+});
+
 #if DEBUG
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -67,3 +72,10 @@ trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteT
 trainers.MapPost("/", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer));
 
 app.Run();
+
+[JsonSerializable(typeof(Client))]
+[JsonSerializable(typeof(Trainer))]
+[JsonSerializable(typeof(List<Trainer>))]
+internal partial class AppJsonSerializerContext : JsonSerializerContext
+{
+}
