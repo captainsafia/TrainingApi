@@ -1,81 +1,210 @@
 using TrainingApi.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
+using 
+Microsoft.Data.Sqlite;
 
 public class TrainingService
 {
-    private readonly TrainingDb _db;
-    
-    public TrainingService(TrainingDb db)
+    public Results<Ok<Client>, NotFound> GetClientById(int id)
     {
-        _db = db;
-    }
-    public async Task<Results<Ok<Client>, NotFound>> GetClientById(int id)
-    {
-        var client = await _db.Clients.FindAsync(id);
-        return client is null ? TypedResults.NotFound() : TypedResults.Ok(client);
-    }
-    public async Task<Results<Created<Client>, NotFound>> UpdateClientById(int id, Client updatedClient)
-    {
-        var client = await _db.Clients.FindAsync(id);
-        if (client is null) return TypedResults.NotFound();
-        client = updatedClient;
-        await _db.SaveChangesAsync();
-        return TypedResults.Created($"/clients/{client.Id}", client);
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                SELECT *
+                FROM clients
+                WHERE id = $id
+            ";
+            command.Parameters.AddWithValue("$id", id);
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var firstName = reader.GetString(1);
+                    var lastName = reader.GetString(2);
+                    var email = reader.GetString(3);
+                    var weight = reader.GetInt32(4);
+                    var height = reader.GetInt32(5);
+                    var birthDate = reader.GetDateTime(6);
+                    var client = new Client(id, firstName, lastName, email, weight, height, birthDate);
+                    return TypedResults.Ok(client);
+                }
+            }
+        }
+        return TypedResults.NotFound();
     }
 
-    public async Task<Results<Ok<Client>, NotFound>> DeleteClientById(int id)
+    public Created<Client> UpdateClientById(int id, Client updatedClient)
     {
-        var client = await _db.Clients.FindAsync(id);
-        if (client is null) return TypedResults.NotFound();
-        _db.Clients.Remove(client);
-        return TypedResults.Ok(client);
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                UPDATE clients
+                SET firstName = $firstName,
+                lastName = $lastName,
+                email = $email,
+                weight = $weight,
+                height = $height,
+                birthDate = $birthDate
+                WHERE id = $id
+            ";
+            command.Parameters.AddWithValue("$id", updatedClient.Id);
+            command.Parameters.AddWithValue("$firstName", updatedClient.FirstName);
+            command.Parameters.AddWithValue("$lastName", updatedClient.LastName);
+            command.Parameters.AddWithValue("$email", updatedClient.Email);
+            command.Parameters.AddWithValue("$weight", updatedClient.Weight);
+            command.Parameters.AddWithValue("$height", updatedClient.Height);
+            command.Parameters.AddWithValue("$birthDate", updatedClient.BirthDate);
+
+            command.ExecuteNonQuery();
+
+            return TypedResults.Created($"/clients/{updatedClient.Id}", updatedClient);
+        }
     }
 
-    public Results<Created<Client>, NotFound> CreateClient(Client client)
+    public Created<Trainer> UpdateTrainerById(int id, Trainer updatedTrainer)
     {
-        _db.Clients.Add(client);
-        return TypedResults.Created($"/clients/{client.Id}", client);
-    }
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
 
-    public async Task<Results<Ok<List<Client>>, NotFound>> GetClients()
-    {
-        var clients = await _db.Clients.ToListAsync();
-        return TypedResults.Ok(clients);
-    }
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                UPDATE trainers
+                SET firstName = $firstName,
+                lastName = $lastName,
+                email = $email,
+                level = $level,
+                isCertificationActive = $isCertificationActive
+                WHERE id = $id
+            ";
+            command.Parameters.AddWithValue("$id", updatedTrainer.Id);
+            command.Parameters.AddWithValue("$firstName", updatedTrainer.FirstName);
+            command.Parameters.AddWithValue("$lastName", updatedTrainer.LastName);
+            command.Parameters.AddWithValue("$email", updatedTrainer.Email);
+            command.Parameters.AddWithValue("$level", updatedTrainer.Level);
+            command.Parameters.AddWithValue("$isCertificationActive", updatedTrainer.IsCertificationActive);
 
-    public async Task<Results<Created<Trainer>, NotFound>> UpdateTrainerById(int id, Trainer updatedTrainer)
-    {
-        var trainer = await _db.Trainers.FindAsync(id);
-        if (trainer is null) return TypedResults.NotFound();
-        trainer = updatedTrainer;
-        await _db.SaveChangesAsync();
-        return TypedResults.Created($"/trainers/{trainer.Id}", trainer);
+            command.ExecuteNonQuery();
+
+            return TypedResults.Created($"/trainers/{updatedTrainer.Id}", updatedTrainer);
+        }
     }
 
     public Results<Created<Trainer>, NotFound> CreateTrainer(Trainer trainer)
     {
-        _db.Trainers.Add(trainer);
-        return TypedResults.Created($"/trainers/{trainer.Id}", trainer);
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                INSERT INTO trainers
+                VALUES ($id, $firstName, $lastName, $email, $level, $isCertificationActive)
+            ";
+            command.Parameters.AddWithValue("$id", trainer.Id);
+            command.Parameters.AddWithValue("$firstName", trainer.FirstName);
+            command.Parameters.AddWithValue("$lastName", trainer.LastName);
+            command.Parameters.AddWithValue("$email", trainer.Email);
+            command.Parameters.AddWithValue("$level", trainer.Level);
+            command.Parameters.AddWithValue("$isCertificationActive", trainer.IsCertificationActive);
+
+            command.ExecuteNonQuery();
+
+            return TypedResults.Created($"/trainers/{trainer.Id}", trainer);
+        }
     }
 
-    public async Task<Ok<List<Trainer>>> GetTrainers()
+    public Ok<List<Trainer>> GetTrainers()
     {
-        var trainers = await _db.Trainers.ToListAsync();
+        List<Trainer> trainers = new();
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                SELECT *
+                FROM trainers
+            ";
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var id = reader.GetInt32(0);
+                    var firstName = reader.GetString(1);
+                    var lastName = reader.GetString(2);
+                    var email = reader.GetString(3);
+                    Enum.TryParse(reader.GetString(4), true, out Level level);
+                    var isCertificationActive = reader.GetBoolean(5);
+                    trainers.Add(new Trainer(id, firstName, lastName, email, level, isCertificationActive));
+                }
+            }
+        }
         return TypedResults.Ok(trainers);
     }
 
-    public async Task<Results<Ok<Trainer>, NotFound>> DeleteTrainerById(int id)
+    public NoContent DeleteTrainerById(int id)
     {
-        var trainer = await _db.Trainers.FindAsync(id);
-        if (trainer is null) return TypedResults.NotFound();
-        _db.Trainers.Remove(trainer);
-        return TypedResults.Ok(trainer);
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                DELETE FROM trainers
+                WHERE id = $id
+            ";
+
+            command.Parameters.AddWithValue("$id", id);
+            command.ExecuteNonQuery();
+
+            return TypedResults.NoContent();
+        }
     }
 
-    public async Task<Results<Ok<Trainer>, NotFound>> GetTrainerById(int id)
+    public Results<Ok<Trainer>, NotFound> GetTrainerById(int id)
     {
-        var trainer = await _db.Trainers.FindAsync(id);
-        return trainer is null ? TypedResults.NotFound() : TypedResults.Ok(trainer);
+        using (var connection = new SqliteConnection("Data Source=trainingapi.db"))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText =
+            @"
+                SELECT *
+                FROM trainers
+                WHERE id = $id
+            ";
+            command.Parameters.AddWithValue("$id", id);
+
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var firstName = reader.GetString(1);
+                    var lastName = reader.GetString(2);
+                    var email = reader.GetString(3);
+                    Enum.TryParse(reader.GetString(4), true, out Level level);
+                    var isCertificationActive = reader.GetBoolean(5);
+                    var trainer = new Trainer(id, firstName, lastName, email, level, isCertificationActive);
+                    return TypedResults.Ok(trainer);
+                }
+            }
+        }
+        return TypedResults.NotFound();
     }
 }

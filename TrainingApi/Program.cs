@@ -1,11 +1,8 @@
-using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using TrainingApi.Shared; 
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services
-    .AddDbContext<TrainingDb>(options => options.UseInMemoryDatabase("training"));
 
 builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
@@ -31,7 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 #endif
 
-app.InitializeDatabase();
+DataGenerator.InitializeDatabase();
 
 var clients = app.MapGroup("/clients/{id}")
     .AddEndpointFilterFactory((handlerContext, next) => {
@@ -47,7 +44,7 @@ clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id
 clients.MapPut("", (int id, Client updatedClient, TrainingService service)
     => service.UpdateClientById(id, updatedClient))
 .AddEndpointFilter(async (context, next) => {
-    var client = context.GetArgument<Client>(2);
+    var client = context.GetArgument<Client>(1);
     if (client.FirstName.Any(char.IsDigit) || client.LastName.Any(char.IsDigit))
     {
         return Results.Problem("Names cannot contain any numeric characters.", statusCode: 400);
