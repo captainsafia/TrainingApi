@@ -1,8 +1,6 @@
 ﻿using System.Reflection;
 using System.Xml.Serialization;
 using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.SwaggerGen;
 
 public class XmlResult<T> : IResult, IEndpointMetadataProvider
 {
@@ -45,29 +43,10 @@ public class XmlResponseTypeMetadata : IProducesResponseTypeMetadata
 
     public int StatusCode { get; set; } = StatusCodes.Status200OK;
 
-    public IEnumerable<string> ContentTypes { get; set; } = new[] { "application/xml" };
+    public IEnumerable<string> ContentTypes { get; set; } = ["application/xml"];
 }
 
 public static class XmlResultExtensions
 {
-    public static XmlResult<T> Xml<T>(this IResultExtensions _, T result) => new XmlResult<T>(result);
-}
-
-public class XmlOperationFilter : IOperationFilter
-{
-    public void Apply(OpenApiOperation operation, OperationFilterContext context)
-    {
-        foreach (var (_, response) in operation.Responses)
-        {
-            if (!response.Content.TryGetValue("application/xml", out var xmlResponseContent))
-            {
-                continue;
-            }
-
-            xmlResponseContent.Schema.Xml = new OpenApiXml()
-            {
-                Name = "Root",
-            };
-        }
-    }
+    public static XmlResult<T> Xml<T>(this IResultExtensions _, T result) => new(result);
 }
