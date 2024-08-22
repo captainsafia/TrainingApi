@@ -1,6 +1,6 @@
 # TrainingApi
 
-TrainingApi is a demo application showcasing the new features in minimal APIs for .NET 7.
+TrainingApi is a demo application showcasing the new features in minimal APIs for .NET 8.
 
 ## Run Application
 
@@ -22,7 +22,7 @@ info: Microsoft.Hosting.Lifetime[0]
       Content root path: /Users/captainsafia/github.com/TrainingApi/TrainingApi
 ```
 
-Navigate to http://localhost:5198/swagger to view the Swagger UI for interacting with the application.
+Navigate to http://localhost:5198/ to view the Scalar UI for interacting with the application.
 
 ### Run Tests
 
