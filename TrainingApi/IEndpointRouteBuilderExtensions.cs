@@ -4,34 +4,32 @@ public static class IEndpointRouteBuilderExtensions
 {
     public static IEndpointRouteBuilder MapTrainerApi(this IEndpointRouteBuilder app)
     {
-        var clients = app.MapGroup("/clients/{id}")
-    .AddEndpointFilterFactory((handlerContext, next) =>
-    {
-        var loggerFactory = handlerContext.ApplicationServices.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("RequestAuditor");
-        return (invocationContext) =>
-        {
-            logger.LogInformation($"[⚙️] Received a request for: {invocationContext.HttpContext.Request.Path}");
-            return next(invocationContext);
-        };
-    });
+        var clients = app.MapGroup("/clients/{id}");
 
         clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id));
         clients.MapPut("", (int id, Client updatedClient, TrainingService service)
             => service.UpdateClientById(id, updatedClient))
-        .AddEndpointFilter(async (context, next) =>
-        {
-            var client = context.GetArgument<Client>(2);
-            if (client.FirstName.Any(char.IsDigit) || client.LastName.Any(char.IsDigit))
+            .AddEndpointFilter(async (context, next) =>
             {
-                return Results.Problem("Names cannot contain any numeric characters.", statusCode: 400);
-            }
-            return await next(context);
-        });
+                var client = context.GetArgument<Client>(2);
+                Dictionary<string, string[]> errors = new();
+                if (client.FirstName.Any(char.IsDigit))
+                {
+                    errors.Add("firstName", ["First names cannot contain any numeric characters."]);
+                }
+                if (client.LastName.Any(char.IsDigit))
+                {
+                    errors.Add("lastName", ["Last names cannot contain any numeric characters."]);
+                }
+                if (errors.Count() > 0)
+                {
+                    return TypedResults.ValidationProblem(errors);
+                }
+                return await next(context);
+            });
 
         var trainers = app.MapGroup("/trainers")
-            .RequireAuthorization("trainer_access")
-            .EnableOpenApiWithAuthentication();
+            .RequireAuthorization("trainer_access");
 
         trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
         trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>

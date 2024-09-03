@@ -13,25 +13,22 @@ builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
     policy.RequireRole("trainer").RequireClaim("permission", "admin"));
 // OpenAPI dependencies
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddOpenApi(options => options.AddJwtBearerSupport());
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     // Set up OpenAPI-related endpoints
-    app.UseSwagger(options =>
-    {
-        options.RouteTemplate = "openapi/{documentName}.json";
-    });
+    app.MapOpenApi();
     app.MapScalarApiReference();
     // Seed the database with mock data
     app.InitializeDatabase();
 }
 
 // Redirect for OpenAPI view
-app.MapGet("/", () => Results.Redirect("/scalar/v1"));
+app.MapGet("/", () => TypedResults.Redirect("/scalar/v1"))
+    .ExcludeFromDescription();
 app.MapTrainerApi();
 
 app.Run();
