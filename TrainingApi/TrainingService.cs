@@ -59,9 +59,11 @@ public class TrainingService
         return TypedResults.Created($"/trainers/{trainer.Id}", trainer);
     }
 
-    public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers()
+    public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers(int itemCount, int currentPage)
     {
-        var trainers = await _db.Trainers.ToListAsync();
+        var trainers = await _db.Trainers
+            .Skip(itemCount * currentPage)
+            .Take(itemCount).ToListAsync();
         return Results.Extensions.Xml(trainers);
     }
 

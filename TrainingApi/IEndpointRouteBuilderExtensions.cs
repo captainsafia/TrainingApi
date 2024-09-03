@@ -33,7 +33,8 @@ public static class IEndpointRouteBuilderExtensions
             .RequireAuthorization("trainer_access")
             .EnableOpenApiWithAuthentication();
 
-        trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
+        trainers.MapGet("/", (TrainingService service, PaginationData paginationData)
+            => service.GetTrainers(paginationData.ItemCount, paginationData.CurrentPage));
         trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
             service.UpdateTrainerById(id, updatedTrainer));
         trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));
