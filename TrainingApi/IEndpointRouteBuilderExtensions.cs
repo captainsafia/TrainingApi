@@ -31,7 +31,8 @@ public static class IEndpointRouteBuilderExtensions
         var trainers = app.MapGroup("/trainers")
             .RequireAuthorization("trainer_access");
 
-        trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
+        trainers.MapGet("/", (TrainingService service, PagingData pagingData)
+            => service.GetTrainers(pagingData.ItemCount, pagingData.CurrentPage));
         trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
             service.UpdateTrainerById(id, updatedTrainer));
         trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));

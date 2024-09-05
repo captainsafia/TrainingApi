@@ -39,12 +39,16 @@ backgroundSize: contain
 <!-- The app that we will be using for this presentation is a little TrainingApi that provides endpoints for managing trainers and clients at a gym. Now, this is meant to be a follow along session where we will browse through the code in this application and discuss some of the key features. -->
 
 ---
+layout: image
+image: ./images/gh-repo-qrcode.png
+backgroundSize: contain
+---
 
 <!-- If you'd like, you can scan this QR code to navigate to a code browser with the app that we are exploring so you can see what lines of code I am referring to as we go through each line of code. -->
 
 ---
 
-# Linear configuration comes to constructing authorization policies
+# Linear configuration comes to constructing authorization policies (.NET 7)
 
 ````md magic-move
 ```csharp
@@ -93,7 +97,9 @@ app.MapGet("/", () => TypedResults.Redirect("/scalar/v1"))
 ```
 ```csharp
 // Arrange
-var clientToCreate = new Client(4, "Gretchen", "Beslier", "gbeslier0@nba.com", 311, 65, DateTime.Parse("7/22/1984", CultureInfo.InvariantCulture));
+var clientToCreate = new Client(4, "Gretchen", "Beslier",
+    "gbeslier0@nba.com", 311, 65,
+    DateTime.Parse("7/22/1984", CultureInfo.InvariantCulture));
 var mockContext = CreateMockDbContext();
 var service = new TrainingService(mockContext.Object);
 
@@ -114,8 +120,19 @@ Assert.Equal(clientToCreate, typedResult.Value);
 ```csharp
 var clients = app.MapGroup("/clients/{id}");
 
+clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id));
+clients.MapPut("", (int id, Client updatedClient, TrainingService service)
+            => service.UpdateClientById(id, updatedClient));
+
 var trainers = app.MapGroup("/trainers")
     .RequireAuthorization("trainer_access");
+
+trainers.MapGet("/", (TrainingService service, PagingData pagingData)
+    => service.GetTrainers(pagingData.ItemCount, pagingData.CurrentPage));
+trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service)
+    => service.UpdateTrainerById(id, updatedTrainer));
+trainers.MapDelete("/{id}", (int id, TrainingService service) => service.DeleteTrainerById(id));
+trainers.MapPost("/", (TrainingService service, Trainer trainer) => service.CreateTrainer(trainer));
 ```
 
 ---
@@ -163,19 +180,63 @@ public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers()
 # Support for `IEndpointMetadataProvider` implementations (.NET 7)
 
 ```csharp
-
+public class XmlResult<T> : IResult, IEndpointMetadataProvider
+{
+    public static void PopulateMetadata(MethodInfo method, EndpointBuilder builder)
+    {
+        builder.Metadata.Add(new XmlResponseTypeMetadata(typeof(T)));
+    }
+}
 ```
 
 ---
 
 # Support for custom parameter binding (.NET 7)
 
+````md magic-move
+```csharp
+trainers.MapGet("/", (TrainingService service, PagingData pagingData)
+    => service.GetTrainers(pagingData.ItemCount, pagingData.CurrentPage));
+```
+```csharp
+public class PagingData
+{
+    public int ItemCount { get; init; } = 10;
+    public int CurrentPage { get; init; } = 1;
+
+    public static ValueTask<PagingData?> BindAsync(HttpContext context, ParameterInfo parameter)
+    {
+        const string ItemCountKey = "itemCount";
+        const string currentPageKey = "page";
+
+        int.TryParse(context.Request.Query[ItemCountKey], out var itemCount);
+        int.TryParse(context.Request.Query[currentPageKey], out var page);
+        page = page == 0 ? 1 : page;
+
+        var result = new PagingData
+        {
+            ItemCount = itemCount,
+            CurrentPage = page
+        };
+
+        return ValueTask.FromResult<PagingData?>(result);
+    }
+}
+```
+````
+
 ---
 
-# Support for native AoT (.NET 8)
+# And more...
+
+## - Generate JWT tokens locally for testing with `dotnet user-jwts` (.NET 7)
+## - Support for native AoT (.NET 8)
+## - Support for form binding from complex types (.NET 8)
+
 
 ---
 layout: cover
+text-class: center
 ---
 
 # Thanks!
