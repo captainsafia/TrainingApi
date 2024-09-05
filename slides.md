@@ -1,11 +1,9 @@
 ---
 layout: cover
-background: https://cover.sli.dev
 ---
 
-# Minimal APIs
-# _Enhanced_
-## Safia Abdalla || Principal Software Engineer || Microsoft
+# minimal apis, _enhanced_
+## a presentation by @captainsafia
 
 <!-- Good morning, everyone! Thanks for coming to my session. I'm Safia, a software engineer on the ASP.NET Core team working mostly on minimal APIs. And today, I want to talk to you about minimal APIs and how you can go above and beyond with them. -->
 
@@ -227,12 +225,15 @@ public class PagingData
 
 ---
 
-# And more...
+# **And more...**
+
+<v-clicks>
 
 ## - Generate JWT tokens locally for testing with `dotnet user-jwts` (.NET 7)
 ## - Support for native AoT (.NET 8)
 ## - Support for form binding from complex types (.NET 8)
 
+</v-clicks>
 
 ---
 layout: cover
