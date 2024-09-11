@@ -13,9 +13,10 @@ layout: cover
 
 <v-clicks>
 
-## - Controller-based APIs versus minimal APIs
 ## - .NET 6 => .NET 8 (and beyond)
 ## - Understanding how the framework is evolving
+## - Learn how framework features can be assembled into more complex APIs
+## - Controller-based APIs vs minimal APIs
 
 </v-clicks>
 
