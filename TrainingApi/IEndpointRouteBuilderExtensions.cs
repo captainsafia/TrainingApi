@@ -28,8 +28,7 @@ public static class IEndpointRouteBuilderExtensions
                 return await next(context);
             });
 
-        var trainers = app.MapGroup("/trainers")
-            .RequireAuthorization("trainer_access");
+        var trainers = app.MapGroup("/trainers");
 
         trainers.MapGet("/", (TrainingService service, PagingData pagingData)
             => service.GetTrainers(pagingData.ItemCount, pagingData.CurrentPage));

@@ -16,6 +16,7 @@ layout: cover
 ## - .NET 6 => .NET 8 (and beyond)
 ## - Understanding how the framework is evolving
 ## - Learn how framework features can be assembled into more complex APIs
+## - Learn about best practices and patterns
 ## - Controller-based APIs vs minimal APIs
 
 </v-clicks>
@@ -50,6 +51,28 @@ backgroundSize: contain
 # Linear configuration comes to constructing authorization policies (.NET 7)
 
 ````md magic-move
+```csharp {1-5}
+builder.Services
+    .AddDbContext<TrainingDb>(options => options.UseInMemoryDatabase("training"));
+builder.Services.AddScoped<TrainingService>();
+// Authentication and authorization dependencies
+builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization(options =>
+    options.AddPolicy("trainer_access", policy =>
+        policy.RequireRole("trainer").RequireClaim("permission", "admin"))
+);
+```
+```csharp {6-9}
+builder.Services
+    .AddDbContext<TrainingDb>(options => options.UseInMemoryDatabase("training"));
+builder.Services.AddScoped<TrainingService>();
+// Authentication and authorization dependencies
+builder.Services.AddAuthentication().AddJwtBearer();
+builder.Services.AddAuthorization(options =>
+    options.AddPolicy("trainer_access", policy =>
+        policy.RequireRole("trainer").RequireClaim("permission", "admin"))
+);
+```
 ```csharp
 builder.Services.AddAuthorization(options =>
     options.AddPolicy("trainer_access", policy =>
@@ -94,6 +117,16 @@ app.MapGet("/", () => Results.Redirect("/scalar/v1"))
 app.MapGet("/", () => TypedResults.Redirect("/scalar/v1"))
     .ExcludeFromDescription();
 ```
+```csharp {1}
+public static RedirectHttpResult Redirect([StringSyntax(StringSyntaxAttribute.Uri)] string url, bool permanent = false, bool preserveMethod = false) { }
+public static Created Created() { }
+```
+```csharp {2}
+public static RedirectHttpResult Redirect([StringSyntax(StringSyntaxAttribute.Uri)] string url, bool permanent = false, bool preserveMethod = false) { }
+public static Created Created() { }
+```
+```
+```
 ```csharp
 // Arrange
 var clientToCreate = new Client(4, "Gretchen", "Beslier",
@@ -108,7 +141,7 @@ var result = service.CreateClient(clientToCreate);
 // Assert
 var typedResult = Assert.IsType<Created<Client>>(result.Result);
 Assert.Equal(StatusCodes.Status201Created, typedResult.StatusCode);
-Assert.Equal(clientToCreate, typedResult.Value);    
+Assert.Equal(clientToCreate, typedResult.Value);  
 ```
 ````
 
@@ -171,6 +204,48 @@ public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers()
 {
     var trainers = await _db.Trainers.ToListAsync();
     return Results.Extensions.Xml(trainers);
+}
+```
+```csharp {4}
+public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers()
+{
+    var trainers = await _db.Trainers.ToListAsync();
+    return Results.Extensions.Xml(trainers);
+}
+```
+```csharp
+public static class Results
+{
+    /// <summary>
+    /// Provides a container for external libraries to extend
+    /// the default `Results` set with their own samples.
+    /// </summary>
+    public static IResultExtensions Extensions { get; } = new ResultExtensions();
+}
+```
+```csharp
+public static class TypedResults
+{
+    /// <summary>
+    /// Provides a container for external libraries to extend
+    /// the default `Results` set with their own samples.
+    /// </summary>
+    public static IResultExtensions Extensions { get; } = new ResultExtensions();
+}
+```
+```csharp
+namespace Microsoft.AspNetCore.Http;
+
+/// <summary>
+/// Provides an interface to registering external methods that provide
+/// custom IResult instances.
+/// </summary>
+public interface IResultExtensions { }
+```
+```csharp
+public static class XmlResultExtensions
+{
+    public static XmlResult<T> Xml<T>(this IResultExtensions _, T result) => new(result);
 }
 ```
 ````
