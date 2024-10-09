@@ -30,8 +30,7 @@ public static class IEndpointRouteBuilderExtensions
         });
 
         var trainers = app.MapGroup("/trainers")
-            .RequireAuthorization("trainer_access")
-            .EnableOpenApiWithAuthentication();
+            .RequireAuthorization("trainer_access");
 
         trainers.MapGet("/", (TrainingService service) => service.GetTrainers());
         trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainingService service) =>
