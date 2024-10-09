@@ -1,6 +1,6 @@
 # TrainingApi
 
-TrainingApi is a demo application showcasing the new features in minimal APIs for .NET 8.
+TrainingApi is a demo application showcasing the new features in minimal APIs for .NET 9.
 
 ## Run Application
 
