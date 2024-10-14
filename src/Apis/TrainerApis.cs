@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using TrainingApi.Services;
 using TrainingApi.Shared;
 
@@ -14,12 +15,16 @@ public static class TrainerApis
             .WithName("ListTrainers")
             .WithDescription("List all trainers");
 
-        trainers.MapPut("/{id}", (int id, Trainer updatedTrainer, TrainersService service) =>
-            service.UpdateTrainerById(id, updatedTrainer))
+        trainers.MapPut("/{id}", (
+            [Description("The unique identifier of the trainer, assigned by the system when the client is created")] int id,
+            Trainer updatedTrainer,
+            TrainersService service) => service.UpdateTrainerById(id, updatedTrainer))
             .WithName("UpdateTrainer")
             .WithDescription("Update a trainer");
 
-        trainers.MapDelete("/{id}", (int id, TrainersService service) => service.DeleteTrainerById(id))
+        trainers.MapDelete("/{id}", (
+            [Description("The unique identifier of the trainer, assigned by the system when the client is created")] int id,
+            TrainersService service) => service.DeleteTrainerById(id))
             .WithName("DeleteTrainer")
             .WithDescription("Delete a trainer");
 

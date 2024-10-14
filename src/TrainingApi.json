@@ -16,6 +16,7 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the client, assigned by the system when the client is created",
             "required": true,
             "schema": {
               "type": "integer",
@@ -49,6 +50,7 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the client, assigned by the system when the client is created",
             "required": true,
             "schema": {
               "type": "integer",
@@ -92,6 +94,7 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the client, assigned by the system when the client is created",
             "required": true,
             "schema": {
               "type": "integer",
@@ -230,6 +233,7 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the trainer, assigned by the system when the client is created",
             "required": true,
             "schema": {
               "type": "integer",
@@ -278,6 +282,7 @@
           {
             "name": "id",
             "in": "path",
+            "description": "The unique identifier of the trainer, assigned by the system when the client is created",
             "required": true,
             "schema": {
               "type": "integer",
