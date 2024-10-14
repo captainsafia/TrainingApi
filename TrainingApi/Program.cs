@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using TrainingApi.Apis;
 using TrainingApi.Shared; 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,7 +31,10 @@ if (app.Environment.IsDevelopment())
 }
 
 // Redirect for OpenAPI view
-app.MapGet("/", () => Results.Redirect("/scalar/v1"));
-app.MapTrainerApi();
+app.MapGet("/", () => Results.Redirect("/scalar/v1"))
+    .ExcludeFromDescription();
+// Register /client and /trainer APIs
+app.MapClientApis();
+app.MapTrainerApis();
 
 app.Run();
