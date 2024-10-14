@@ -1,3 +1,4 @@
+using TrainingApi.Services;
 using TrainingApi.Shared;
 
 namespace TrainingApi.Apis;
@@ -6,10 +7,12 @@ public static class ClientApis
 {
     public static IEndpointRouteBuilder MapClientApis(this IEndpointRouteBuilder app)
     {
-        var clients = app.MapGroup("/clients/{id}");
-        clients.MapGet("", (int id, TrainingService service) => service.GetClientById(id));
-        clients.MapPut("", (int id, Client updatedClient, TrainingService service)
+        var clients = app.MapGroup("/clients");
+        clients.MapGet("/{id}", (int id, ClientsService service) => service.GetClientById(id));
+        clients.MapPut("/{id}", (int id, Client updatedClient, ClientsService service)
             => service.UpdateClientById(id, updatedClient));
+        clients.MapPost("", (ClientsService service, Client client) => service.CreateClient(client));
+        clients.MapPost("/{id}", (int id, ClientsService service) => service.DeleteClientById(id));
 
         return app;
     }
