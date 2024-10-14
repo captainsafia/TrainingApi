@@ -329,49 +329,61 @@
         "properties": {
           "id": {
             "type": "integer",
+            "description": "The unique identifier of the client, assigned by the system when the client is created",
             "format": "int32"
           },
           "firstName": {
-            "type": "string"
+            "type": "string",
+            "description": "The first name of the client"
           },
           "lastName": {
-            "type": "string"
+            "type": "string",
+            "description": "The last name of the client"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "The email of the client"
           },
           "weight": {
             "type": "integer",
+            "description": "The weight of the client in pounds, rounded to the nearest pound.",
             "format": "int32"
           },
           "height": {
             "type": "integer",
+            "description": "The height of the client in inches, rounded to the nearest inch.",
             "format": "int32"
           },
           "birthDate": {
             "type": "string",
+            "description": "The date of birth of the client",
             "format": "date-time"
           }
         }
       },
       "Level": {
-        "type": "integer"
+        "type": "integer",
+        "description": "The level of the trainer"
       },
       "Trainer": {
         "type": "object",
         "properties": {
           "id": {
             "type": "integer",
+            "description": "The unique identifier of the trainer, assigned by the system when the trainer is created",
             "format": "int32"
           },
           "firstName": {
-            "type": "string"
+            "type": "string",
+            "description": "The first name of the trainer"
           },
           "lastName": {
-            "type": "string"
+            "type": "string",
+            "description": "The last name of the trainer"
           },
           "email": {
-            "type": "string"
+            "type": "string",
+            "description": "The email address of the trainer"
           },
           "level": {
             "$ref": "#/components/schemas/Level"
