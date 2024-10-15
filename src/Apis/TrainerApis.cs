@@ -9,7 +9,8 @@ public static class TrainerApis
     public static IEndpointRouteBuilder MapTrainerApis(this IEndpointRouteBuilder app)
     {
         var trainers = app.MapGroup("/trainers")
-            .RequireAuthorization("trainer_access");
+            .RequireAuthorization("trainer_access")
+            .WithTags("Trainers");
 
         trainers.MapGet("/", (TrainersService service) => service.GetTrainers())
             .WithName("ListTrainers")

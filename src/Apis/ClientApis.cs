@@ -8,7 +8,9 @@ public static class ClientApis
 {
     public static IEndpointRouteBuilder MapClientApis(this IEndpointRouteBuilder app)
     {
-        var clients = app.MapGroup("/clients");
+        var clients = app.MapGroup("/clients")
+            .WithTags("Clients");
+
         clients.MapGet("/{id}", (
             [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
             ClientsService service) => service.GetClientById(id))

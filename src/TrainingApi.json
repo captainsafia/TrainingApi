@@ -8,7 +8,7 @@
     "/clients/{id}": {
       "get": {
         "tags": [
-          "TrainingApi"
+          "Clients"
         ],
         "description": "Get a client",
         "operationId": "GetClient",
@@ -42,7 +42,7 @@
       },
       "put": {
         "tags": [
-          "TrainingApi"
+          "Clients"
         ],
         "description": "Update a client",
         "operationId": "UpdateClient",
@@ -86,7 +86,7 @@
       },
       "post": {
         "tags": [
-          "TrainingApi"
+          "Clients"
         ],
         "description": "Delete a client",
         "operationId": "DeleteClient",
@@ -122,7 +122,7 @@
     "/clients": {
       "post": {
         "tags": [
-          "TrainingApi"
+          "Clients"
         ],
         "description": "Create a client",
         "operationId": "CreateClient",
@@ -156,7 +156,7 @@
     "/trainers": {
       "get": {
         "tags": [
-          "TrainingApi"
+          "Trainers"
         ],
         "description": "List all trainers",
         "operationId": "ListTrainers",
@@ -186,7 +186,7 @@
       },
       "post": {
         "tags": [
-          "TrainingApi"
+          "Trainers"
         ],
         "description": "Create a trainer",
         "operationId": "CreateTrainer",
@@ -225,7 +225,7 @@
     "/trainers/{id}": {
       "put": {
         "tags": [
-          "TrainingApi"
+          "Trainers"
         ],
         "description": "Update a trainer",
         "operationId": "UpdateTrainer",
@@ -274,7 +274,7 @@
       },
       "delete": {
         "tags": [
-          "TrainingApi"
+          "Trainers"
         ],
         "description": "Delete a trainer",
         "operationId": "DeleteTrainer",
@@ -362,7 +362,11 @@
         }
       },
       "Level": {
-        "type": "integer",
+        "enum": [
+          "Junior",
+          "Senior",
+          "Elite"
+        ],
         "description": "The level of the trainer"
       },
       "Trainer": {
@@ -403,7 +407,10 @@
   },
   "tags": [
     {
-      "name": "TrainingApi"
+      "name": "Clients"
+    },
+    {
+      "name": "Trainers"
     }
   ]
 }
