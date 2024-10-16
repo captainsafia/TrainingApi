@@ -1,0 +1,8 @@
+@HostAddress = http://localhost:5198
+
+GET {{HostAddress}}/clients/1
+
+###
+
+GET {{HostAddress}}/clients/666
+
