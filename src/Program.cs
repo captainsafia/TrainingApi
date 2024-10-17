@@ -18,7 +18,8 @@ builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
 // OpenAPI dependencies
 builder.Services.AddOpenApi(options =>
 {
-    options.UseJwtBearerAuthenticationTransformers();
+    options.UseJwtBearerAuthentication();
+    options.UseExamples();
 });
 
 var app = builder.Build();
@@ -27,7 +28,10 @@ if (app.Environment.IsDevelopment())
 {
     // Set up OpenAPI-related endpoints
     app.MapOpenApi();
-    app.MapScalarApiReference();
+    app.MapScalarApiReference(options =>
+    {
+        options.DefaultFonts = false;
+    });
     // Seed the database with mock data
     app.InitializeDatabase();
 }
