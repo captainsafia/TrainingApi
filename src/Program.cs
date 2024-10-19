@@ -5,6 +5,8 @@ using TrainingApi.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddOpenApi();
+
 // Data and API dependencies
 builder.Services
     .AddDbContext<TrainingDb>(options => options.UseInMemoryDatabase("training"));
@@ -19,6 +21,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
+    app.MapOpenApi();
     // Seed the database with mock data
     app.InitializeDatabase();
 }
