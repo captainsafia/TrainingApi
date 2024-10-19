@@ -27,12 +27,12 @@ public class TrainersService(TrainingDb trainingDb)
         return TypedResults.Ok(trainers);
     }
 
-    public async Task<Results<Ok<Trainer>, NotFound>> DeleteTrainerById(int id)
+    public async Task<Results<NoContent, NotFound>> DeleteTrainerById(int id)
     {
         var trainer = await trainingDb.Trainers.FindAsync(id);
         if (trainer is null) return TypedResults.NotFound();
         trainingDb.Trainers.Remove(trainer);
-        return TypedResults.Ok(trainer);
+        return TypedResults.NoContent();
     }
 
     public async Task<Results<Ok<Trainer>, NotFound>> GetTrainerById(int id)
