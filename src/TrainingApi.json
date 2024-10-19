@@ -164,7 +164,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/xml": {
+              "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -359,6 +359,15 @@
             "description": "The date of birth of the client",
             "format": "date-time"
           }
+        },
+        "example": {
+          "id": 1,
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "email": "jane.smith@email.com",
+          "weight": 60,
+          "height": 170,
+          "birthDate": "1990-01-01T00:00:00.0000000+00:00"
         }
       },
       "Level": {
@@ -395,6 +404,14 @@
           "isCertificationActive": {
             "type": "boolean"
           }
+        },
+        "example": {
+          "id": 1,
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john.doe@email.com",
+          "level": "Junior",
+          "isCertificationActive": false
         }
       }
     },

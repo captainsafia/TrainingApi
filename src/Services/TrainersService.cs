@@ -21,10 +21,10 @@ public class TrainersService(TrainingDb trainingDb)
         return TypedResults.Created($"/trainers/{trainer.Id}", trainer);
     }
 
-    public async Task<Results<XmlResult<List<Trainer>>, NotFound>> GetTrainers()
+    public async Task<Results<Ok<List<Trainer>>, NotFound>> GetTrainers()
     {
         var trainers = await trainingDb.Trainers.ToListAsync();
-        return Results.Extensions.Xml(trainers);
+        return TypedResults.Ok(trainers);
     }
 
     public async Task<Results<Ok<Trainer>, NotFound>> DeleteTrainerById(int id)
