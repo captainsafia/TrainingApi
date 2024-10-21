@@ -29,6 +29,7 @@ jobs:
         uses: stoplightio/spectral-action@latest
         with:
           file_glob: 'src/TrainingApi.json'
+          spectral_ruleset: .spectral.yml
 
       - name: Test
         run: dotnet test --no-build --verbosity normal
