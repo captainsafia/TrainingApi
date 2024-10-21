@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using TrainingApi.Shared;
-using TrainingApi;
+using TrainingApi.Services;
 using Moq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
@@ -16,7 +16,7 @@ public class UnitTests
         // Arrange
         var clientToCreate = new Client(4, "Gretchen", "Beslier", "gbeslier0@nba.com", 311, 65, DateTime.Parse("7/22/1984", CultureInfo.InvariantCulture));
         var mockContext = CreateMockDbContext();
-        var service = new TrainingService(mockContext.Object);
+        var service = new ClientsService(mockContext.Object);
 
         // Act
         var result = service.CreateClient(clientToCreate);
