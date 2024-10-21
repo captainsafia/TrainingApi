@@ -1,0 +1,35 @@
+name: Build and lint APIs
+
+on:
+  pull_request:
+    branches:
+    - 9.0
+  push:
+    branches:
+    - 9.0
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repository
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET (global.json)
+        uses: actions/setup-dotnet@v3
+
+      - name: Install dependencies
+        run: dotnet restore
+        
+      - name: Build
+        run: dotnet build --no-restore
+    
+      - name: Run Spectral
+        # Run Spectral
+        uses: stoplightio/spectral-action@latest
+        with:
+          file_glob: 'src/TrainingApi.json'
+          spectral_ruleset: .spectral.yml
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
