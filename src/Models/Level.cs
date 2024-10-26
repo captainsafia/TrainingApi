@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace TrainingApi.Shared;
+namespace TrainingApi.Models;
 
 [JsonConverter(typeof(JsonStringEnumConverter<Level>))]
 public enum Level

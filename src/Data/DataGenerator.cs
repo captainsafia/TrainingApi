@@ -1,6 +1,6 @@
 using System.Globalization;
 using Microsoft.EntityFrameworkCore;
-using TrainingApi.Shared;
+using TrainingApi.Models;
 
 public static class DataGenerator
 {

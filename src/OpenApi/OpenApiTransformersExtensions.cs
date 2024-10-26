@@ -3,7 +3,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Authorization;
-using TrainingApi.Shared;
+using TrainingApi.Models;
 using Microsoft.OpenApi.Any;
 
 public static class OpenApiTransformersExtensions

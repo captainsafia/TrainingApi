@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
-using TrainingApi.Shared;
+using TrainingApi.Models;
 
 namespace TrainingApi.Services;
 

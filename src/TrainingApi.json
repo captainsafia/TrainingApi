@@ -10,8 +10,7 @@
         "tags": [
           "Clients"
         ],
-        "description": "Get a client",
-        "operationId": "GetClient",
+        "summary": "Get a client.",
         "parameters": [
           {
             "name": "id",
@@ -21,7 +20,8 @@
             "schema": {
               "type": "integer",
               "format": "int32"
-            }
+            },
+            "example": null
           }
         ],
         "responses": {
@@ -359,6 +359,16 @@
             "description": "The date of birth of the client",
             "format": "date-time"
           }
+        },
+        "description": "Represents a client of the gym.",
+        "example": {
+          "id": 1,
+          "firstName": "Jane",
+          "lastName": "Smith",
+          "email": "jane.smith@email.com",
+          "weight": 60,
+          "height": 170,
+          "birthDate": "1990-01-01T00:00:00.0000000-08:00"
         }
       },
       "Level": {
@@ -393,8 +403,17 @@
             "$ref": "#/components/schemas/Level"
           },
           "isCertificationActive": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "Whether the trainer's certification is active"
           }
+        },
+        "example": {
+          "id": 1,
+          "firstName": "John",
+          "lastName": "Doe",
+          "email": "john.doe@email.com",
+          "level": "Junior",
+          "isCertificationActive": false
         }
       }
     },

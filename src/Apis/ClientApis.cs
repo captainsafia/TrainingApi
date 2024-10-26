@@ -1,6 +1,7 @@
 using System.ComponentModel;
+using Microsoft.AspNetCore.Http.HttpResults;
 using TrainingApi.Services;
-using TrainingApi.Shared;
+using TrainingApi.Models;
 
 namespace TrainingApi.Apis;
 
@@ -11,11 +12,7 @@ public static class ClientApis
         var clients = app.MapGroup("/clients")
             .WithTags("Clients");
 
-        clients.MapGet("/{id}", (
-            [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
-            ClientsService service) => service.GetClientById(id))
-            .WithName("GetClient")
-            .WithDescription("Get a client");
+        clients.MapGet("/{id}", GetClientById);
 
         clients.MapPut("/{id}", (
              [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
@@ -35,5 +32,14 @@ public static class ClientApis
             .WithDescription("Delete a client");
 
         return app;
+    }
+
+    /// <summary>
+    /// Get a client.
+    /// </summary>
+    /// <param name="id">The unique identifier of the client, assigned by the system when the client is created</param>
+    public static Task<Results<Ok<Client>, NotFound>> GetClientById(int id, ClientsService service)
+    {
+        return service.GetClientById(id);
     }
 }

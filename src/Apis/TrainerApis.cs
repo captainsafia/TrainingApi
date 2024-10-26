@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using TrainingApi.Services;
-using TrainingApi.Shared;
+using TrainingApi.Models;
 
 namespace TrainingApi.Apis;
 

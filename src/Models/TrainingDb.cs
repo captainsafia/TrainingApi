@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace TrainingApi.Shared;
+namespace TrainingApi.Models;
 
 public class TrainingDb : DbContext
 {

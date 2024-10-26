@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using TrainingApi.Apis;
 using TrainingApi.Services;
-using TrainingApi.Shared; 
+using TrainingApi.Models; 
 
 var builder = WebApplication.CreateBuilder(args);
 

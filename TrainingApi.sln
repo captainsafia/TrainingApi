@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi", "src\Training
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi.Tests", "tests\TrainingApi.Tests.csproj", "{26C8B7F3-24D1-48B2-9883-6BC80E7D909C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi.Shared", "shared\TrainingApi.Shared.csproj", "{540D803C-BDFB-4812-94DF-BF8C22E46B5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi.Models", "shared\TrainingApi.Models.csproj", "{540D803C-BDFB-4812-94DF-BF8C22E46B5F}"
 EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
