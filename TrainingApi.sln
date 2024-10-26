@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi", "src\Training
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi.Tests", "tests\TrainingApi.Tests.csproj", "{26C8B7F3-24D1-48B2-9883-6BC80E7D909C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingApi.Models", "shared\TrainingApi.Models.csproj", "{540D803C-BDFB-4812-94DF-BF8C22E46B5F}"
-EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,17 +44,5 @@ Global
 		{26C8B7F3-24D1-48B2-9883-6BC80E7D909C}.Release|x64.Build.0 = Release|Any CPU
 		{26C8B7F3-24D1-48B2-9883-6BC80E7D909C}.Release|x86.ActiveCfg = Release|Any CPU
 		{26C8B7F3-24D1-48B2-9883-6BC80E7D909C}.Release|x86.Build.0 = Release|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Debug|x64.Build.0 = Debug|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Debug|x86.Build.0 = Debug|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Release|x64.ActiveCfg = Release|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Release|x64.Build.0 = Release|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Release|x86.ActiveCfg = Release|Any CPU
-		{540D803C-BDFB-4812-94DF-BF8C22E46B5F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

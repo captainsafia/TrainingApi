@@ -368,7 +368,7 @@
           "email": "jane.smith@email.com",
           "weight": 60,
           "height": 170,
-          "birthDate": "1990-01-01T00:00:00.0000000-08:00"
+          "birthDate": "1990-01-01T00:00:00.0000000+00:00"
         }
       },
       "Level": {
