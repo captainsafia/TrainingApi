@@ -15,24 +15,28 @@ public static class ClientApis
             [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
             ClientsService service) => service.GetClientById(id))
             .WithName("GetClient")
-            .WithDescription("Get a client");
+            .WithSummary("Get a client")
+            .WithDescription("Get the client with the specified id.");
 
         clients.MapPut("/{id}", (
              [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
             Client updatedClient,
             ClientsService service) => service.UpdateClientById(id, updatedClient))
             .WithName("UpdateClient")
-            .WithDescription("Update a client");
+            .WithSummary("Update a client")
+            .WithDescription("Update the client with the specified id using the information passed in the request body.");
 
         clients.MapPost("", (ClientsService service, Client client) => service.CreateClient(client))
             .WithName("CreateClient")
-            .WithDescription("Create a client");
+            .WithSummary("Create a client")
+            .WithDescription("Create a new client using the information passed in the request body.");
 
         clients.MapDelete("/{id}", (
              [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
              ClientsService service) => service.DeleteClientById(id))
             .WithName("DeleteClient")
-            .WithDescription("Delete a client");
+            .WithSummary("Delete a client")
+            .WithDescription("Delete the client with the specified id.");
 
         return app;
     }

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace TrainingApi.Shared;
 
@@ -13,12 +14,17 @@ public record Trainer(int Id, string FirstName, string LastName, string Email, L
     public int Id { get; set; } = Id;
 
     [Description("The first name of the trainer")]
+    [MaxLength(50)]
+    [RegularExpression("^[a-zA-Z]+$")]
     public string FirstName { get; set; } = FirstName;
     [Description("The last name of the trainer")]
+    [MaxLength(50)]
+    [RegularExpression("^[a-zA-Z]+$")]
     public string LastName { get; set; } = LastName;
     [Description("The email address of the trainer")]
     public string Email { get; set; } = Email;
     [Description("The level of the trainer")]
     public Level Level { get; set; } = Level;
+    [Description("The certification status of the trainer")]
     public bool IsCertificationActive { get; set; } = IsCertificationActive;
 }

@@ -14,24 +14,30 @@ public static class TrainerApis
 
         trainers.MapGet("/", (TrainersService service) => service.GetTrainers())
             .WithName("ListTrainers")
-            .WithDescription("List all trainers");
+            .WithSummary("List all trainers")
+            .WithDescription("Get a list of all trainers.");
 
         trainers.MapPut("/{id}", (
             [Description("The unique identifier of the trainer, assigned by the system when the client is created")] int id,
             Trainer updatedTrainer,
             TrainersService service) => service.UpdateTrainerById(id, updatedTrainer))
             .WithName("UpdateTrainer")
-            .WithDescription("Update a trainer");
+            .WithSummary("Update a trainer")
+            .WithDescription("Update the trainer with the specified id using the information passed in the request body.");
+
 
         trainers.MapDelete("/{id}", (
             [Description("The unique identifier of the trainer, assigned by the system when the client is created")] int id,
             TrainersService service) => service.DeleteTrainerById(id))
             .WithName("DeleteTrainer")
-            .WithDescription("Delete a trainer");
+            .WithSummary("Delete a trainer")
+            .WithDescription("Delete the trainer with the specified id.");
+
 
         trainers.MapPost("/", (TrainersService service, Trainer trainer) => service.CreateTrainer(trainer))
             .WithName("CreateTrainer")
-            .WithDescription("Create a trainer");
+            .WithSummary("Create a trainer")
+            .WithDescription("Create a new trainer using the information passed in the request body.");
 
         return app;
     }

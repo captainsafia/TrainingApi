@@ -10,7 +10,8 @@
         "tags": [
           "Clients"
         ],
-        "description": "Get a client",
+        "summary": "Get a client",
+        "description": "Get the client with the specified id.",
         "operationId": "GetClient",
         "parameters": [
           {
@@ -44,7 +45,8 @@
         "tags": [
           "Clients"
         ],
-        "description": "Update a client",
+        "summary": "Update a client",
+        "description": "Update the client with the specified id using the information passed in the request body.",
         "operationId": "UpdateClient",
         "parameters": [
           {
@@ -88,7 +90,8 @@
         "tags": [
           "Clients"
         ],
-        "description": "Delete a client",
+        "summary": "Delete a client",
+        "description": "Delete the client with the specified id.",
         "operationId": "DeleteClient",
         "parameters": [
           {
@@ -117,7 +120,8 @@
         "tags": [
           "Clients"
         ],
-        "description": "Create a client",
+        "summary": "Create a client",
+        "description": "Create a new client using the information passed in the request body.",
         "operationId": "CreateClient",
         "requestBody": {
           "content": {
@@ -151,7 +155,8 @@
         "tags": [
           "Trainers"
         ],
-        "description": "List all trainers",
+        "summary": "List all trainers",
+        "description": "Get a list of all trainers.",
         "operationId": "ListTrainers",
         "responses": {
           "200": {
@@ -178,7 +183,8 @@
         "tags": [
           "Trainers"
         ],
-        "description": "Create a trainer",
+        "summary": "Create a trainer",
+        "description": "Create a new trainer using the information passed in the request body.",
         "operationId": "CreateTrainer",
         "requestBody": {
           "content": {
@@ -217,7 +223,8 @@
         "tags": [
           "Trainers"
         ],
-        "description": "Update a trainer",
+        "summary": "Update a trainer",
+        "description": "Update the trainer with the specified id using the information passed in the request body.",
         "operationId": "UpdateTrainer",
         "parameters": [
           {
@@ -266,7 +273,8 @@
         "tags": [
           "Trainers"
         ],
-        "description": "Delete a trainer",
+        "summary": "Delete a trainer",
+        "description": "Delete the trainer with the specified id.",
         "operationId": "DeleteTrainer",
         "parameters": [
           {
@@ -316,10 +324,14 @@
             "format": "int32"
           },
           "firstName": {
+            "maxLength": 50,
+            "pattern": "^[a-zA-Z]+$",
             "type": "string",
             "description": "The first name of the client"
           },
           "lastName": {
+            "maxLength": 50,
+            "pattern": "^[a-zA-Z]+$",
             "type": "string",
             "description": "The last name of the client"
           },
@@ -370,10 +382,14 @@
             "format": "int32"
           },
           "firstName": {
+            "maxLength": 50,
+            "pattern": "^[a-zA-Z]+$",
             "type": "string",
             "description": "The first name of the trainer"
           },
           "lastName": {
+            "maxLength": 50,
+            "pattern": "^[a-zA-Z]+$",
             "type": "string",
             "description": "The last name of the trainer"
           },
@@ -385,7 +401,8 @@
             "$ref": "#/components/schemas/Level"
           },
           "isCertificationActive": {
-            "type": "boolean"
+            "type": "boolean",
+            "description": "The certification status of the trainer"
           }
         },
         "example": {
