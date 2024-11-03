@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using TrainingApi.Apis;
 using TrainingApi.Services;
-using TrainingApi.Shared; 
+using TrainingApi.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +21,8 @@ builder.Services.AddOpenApi(options =>
     options.UseJwtBearerAuthentication();
     options.UseExamples();
 });
+
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 

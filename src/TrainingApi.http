@@ -6,3 +6,6 @@ GET {{HostAddress}}/clients/1
 
 GET {{HostAddress}}/clients/666
 
+###
+
+GET {{HostAddress}}/trainers/1
