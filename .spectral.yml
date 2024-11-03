@@ -1,12 +1,14 @@
 extends: spectral:oas
 rules:
   info-contact: off
+  info-description: off
   oas3-api-servers: off
 
   success-response:
     description: All operations should have a success response.
     message: Operation is missing a success response.
     severity: warn
+    formats: ['oas3']
     given: $.paths.*.*.responses
     then:
       function: schema
@@ -21,6 +23,7 @@ rules:
     description: All operations should have a error response.
     message: Operation is missing a error response.
     severity: warn
+    formats: ['oas3']
     given: $.paths.*.*.responses
     then:
       function: schema
@@ -34,7 +37,30 @@ rules:
     description: All parameters should have a description
     message: Parameter is missing a description.
     severity: warn
+    formats: ['oas3']
     given: $.paths.*.*.parameters[*]
     then:
       field: description
+      function: truthy
+
+  security-schemes:
+    description: API definition does not define security schemes.
+    message: API definition does not define security schemes.
+    severity: info
+    formats: ['oas3']
+    given:
+    - $.components
+    then:
+      field: securitySchemes
+      function: truthy
+
+  response-schema-examples:
+    description: Response body schemas should include an example
+    message: Response body schemas should include an example
+    severity: warn
+    formats: ['oas3']
+    given:
+    - $.paths[*][get,put,post,patch,delete].responses[?(@property >= 200 && @property < 300)].content[*].schema
+    then:
+      field: example
       function: truthy
