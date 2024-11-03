@@ -157,7 +157,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/xml": {
+              "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
@@ -166,9 +166,6 @@
                 }
               }
             }
-          },
-          "404": {
-            "description": "Not Found"
           }
         },
         "security": [
