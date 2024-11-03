@@ -28,7 +28,7 @@ public static class ClientApis
             .WithName("CreateClient")
             .WithDescription("Create a client");
 
-        clients.MapPost("/{id}", (
+        clients.MapDelete("/{id}", (
              [Description("The unique identifier of the client, assigned by the system when the client is created")] int id,
              ClientsService service) => service.DeleteClientById(id))
             .WithName("DeleteClient")

@@ -84,7 +84,7 @@
           }
         }
       },
-      "post": {
+      "delete": {
         "tags": [
           "Clients"
         ],
@@ -103,15 +103,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Client"
-                }
-              }
-            }
+          "204": {
+            "description": "No Content"
           },
           "404": {
             "description": "Not Found"
@@ -291,15 +284,8 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Trainer"
-                }
-              }
-            }
+          "204": {
+            "description": "No Content"
           },
           "404": {
             "description": "Not Found"
@@ -367,7 +353,7 @@
           "email": "jane.smith@email.com",
           "weight": 60,
           "height": 170,
-          "birthDate": "1990-01-01T00:00:00.0000000-08:00"
+          "birthDate": "1990-01-01T00:00:00.0000000+00:00"
         }
       },
       "Level": {

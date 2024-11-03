@@ -20,12 +20,12 @@ public class ClientsService(TrainingDb trainingDb)
         return TypedResults.Created($"/clients/{client.Id}", client);
     }
 
-    public async Task<Results<Ok<Client>, NotFound>> DeleteClientById(int id)
+    public async Task<Results<NoContent, NotFound>> DeleteClientById(int id)
     {
         var client = await trainingDb.Clients.FindAsync(id);
         if (client is null) return TypedResults.NotFound();
         trainingDb.Clients.Remove(client);
-        return TypedResults.Ok(client);
+        return TypedResults.NoContent();
     }
 
     public Results<Created<Client>, NotFound> CreateClient(Client client)
