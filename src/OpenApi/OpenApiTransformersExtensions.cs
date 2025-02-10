@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Authorization;
 using TrainingApi.Shared;
-using Microsoft.OpenApi.Any;
+using System.Text.Json.Nodes;
 
 public static class OpenApiTransformersExtensions
 {
@@ -24,6 +24,7 @@ public static class OpenApiTransformersExtensions
         options.AddDocumentTransformer((document, context, cancellationToken) =>
         {
             document.Components ??= new();
+            document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
             document.Components.SecuritySchemes.Add(JwtBearerDefaults.AuthenticationScheme, scheme);
             return Task.CompletedTask;
         });
@@ -44,31 +45,45 @@ public static class OpenApiTransformersExtensions
         {
             if (context.JsonTypeInfo.Type == typeof(Trainer))
             {
-                schema.Example = new OpenApiObject
+                schema.Example = new JsonObject
                 {
-                    ["id"] = new OpenApiInteger(1),
-                    ["firstName"] = new OpenApiString("John"),
-                    ["lastName"] = new OpenApiString("Doe"),
-                    ["email"] = new OpenApiString("john.doe@email.com"),
-                    ["level"] = new OpenApiString("Junior"),
-                    ["isCertificationActive"] = new OpenApiBoolean(false)
+                    ["id"] = 1,
+                    ["firstName"] = "John",
+                    ["lastName"] = "Doe",
+                    ["email"] = "john.doe@email.com",
+                    ["level"] = "Junior",
+                    ["isCertificationActive"] = false
                 };
             }
             if (context.JsonTypeInfo.Type == typeof(Client))
             {
-                schema.Example = new OpenApiObject
+                schema.Example = new JsonObject
                 {
-                    ["id"] = new OpenApiInteger(1),
-                    ["firstName"] = new OpenApiString("Jane"),
-                    ["lastName"] = new OpenApiString("Smith"),
-                    ["email"] = new OpenApiString("jane.smith@email.com"),
-                    ["weight"] = new OpenApiInteger(60),
-                    ["height"] = new OpenApiInteger(170),
-                    ["birthDate"] = new OpenApiDateTime(new DateTime(1990, 1, 1))
+                    ["id"] = 1,
+                    ["firstName"] = "Jane",
+                    ["lastName"] = "Smith",
+                    ["email"] ="jane.smith@email.com",
+                    ["weight"] = 60,
+                    ["height"] = 170,
+                    ["birthDate"] = "1990-01-01"
                 };
             }
             return Task.CompletedTask;
         });
+        return options;
+    }
+
+    public static OpenApiOptions MapType<T>(this OpenApiOptions options, JsonSchemaType type)
+    {
+        options.AddSchemaTransformer((schema, context, cancellationToken) =>
+        {
+            if (context.JsonTypeInfo.Type == typeof(T))
+            {
+                schema.Type = type;
+            }
+            return Task.CompletedTask;
+        });
+        
         return options;
     }
 }

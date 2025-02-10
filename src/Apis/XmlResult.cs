@@ -44,6 +44,8 @@ public class XmlResponseTypeMetadata : IProducesResponseTypeMetadata
     public int StatusCode { get; set; } = StatusCodes.Status200OK;
 
     public IEnumerable<string> ContentTypes { get; set; } = ["application/xml"];
+
+    public string? Description { get; set; }
 }
 
 public static class XmlResultExtensions
