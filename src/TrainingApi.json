@@ -382,6 +382,24 @@
             "type": "string",
             "description": "The date of birth of the client.",
             "format": "date-time"
+          },
+          "lastWorkout": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "The date of the last workout of the client.",
+            "format": "date"
+          },
+          "goal": {
+            "$ref": "#/components/schemas/NullableOfTrainingGoal"
+          },
+          "notes": {
+            "type": [
+              "null",
+              "string"
+            ],
+            "description": "Notes about the client."
           }
         },
         "description": "Represents a client with personal information.",
@@ -392,7 +410,7 @@
           "email": "jane.smith@email.com",
           "weight": 60,
           "height": 170,
-          "birthDate": "1990-01-01T00:00:00.0000000-08:00"
+          "birthDate": "1990-01-01T00:00:00.0000000+00:00"
         }
       },
       "Level": {
@@ -402,6 +420,18 @@
           "Elite"
         ],
         "description": "The level of the trainer."
+      },
+      "NullableOfTrainingGoal": {
+        "enum": [
+          "FatLoss",
+          "MuscleGain",
+          "Endurance",
+          "Flexibility",
+          "Strength",
+          "GeneralHealth",
+          null
+        ],
+        "description": "The training goal of the client."
       },
       "Trainer": {
         "type": "object",
