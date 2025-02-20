@@ -16,7 +16,11 @@ builder.Services.AddAuthentication().AddJwtBearer();
 builder.Services.AddAuthorizationBuilder().AddPolicy("trainer_access", policy =>
     policy.RequireRole("trainer").RequireClaim("permission", "admin"));
 // OpenAPI dependencies
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options =>
+{
+    options.UseJwtBearerAuthentication();
+    options.UseExamples();
+});
 
 var app = builder.Build();
 
