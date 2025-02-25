@@ -19,11 +19,7 @@
             "description": "The unique identifier of the client, assigned by the system when the client is created",
             "required": true,
             "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32"
             }
           }
@@ -57,11 +53,7 @@
             "description": "The unique identifier of the client, assigned by the system when the client is created",
             "required": true,
             "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32"
             }
           }
@@ -105,11 +97,7 @@
             "description": "The unique identifier of the client, assigned by the system when the client is created",
             "required": true,
             "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32"
             }
           }
@@ -191,7 +179,9 @@
           }
         },
         "security": [
-          { }
+          {
+            "Bearer": [ ]
+          }
         ]
       },
       "post": {
@@ -226,7 +216,9 @@
           }
         },
         "security": [
-          { }
+          {
+            "Bearer": [ ]
+          }
         ]
       }
     },
@@ -244,11 +236,7 @@
             "description": "The unique identifier of the trainer, assigned by the system when the client is created",
             "required": true,
             "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32"
             }
           }
@@ -279,7 +267,9 @@
           }
         },
         "security": [
-          { }
+          {
+            "Bearer": [ ]
+          }
         ]
       },
       "delete": {
@@ -295,11 +285,7 @@
             "description": "The unique identifier of the trainer, assigned by the system when the client is created",
             "required": true,
             "schema": {
-              "pattern": "^-?(?:0|[1-9]\\d*)$",
-              "type": [
-                "integer",
-                "string"
-              ],
+              "type": "integer",
               "format": "int32"
             }
           }
@@ -320,7 +306,9 @@
           }
         },
         "security": [
-          { }
+          {
+            "Bearer": [ ]
+          }
         ]
       }
     }
@@ -340,51 +328,31 @@
         "type": "object",
         "properties": {
           "id": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "description": "The unique identifier of the client, assigned by the system when the client is created.",
+            "type": "integer",
             "format": "int32"
           },
           "firstName": {
-            "type": "string",
-            "description": "The first name of the client."
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "description": "The last name of the client."
+            "type": "string"
           },
           "email": {
-            "type": "string",
-            "description": "The email of the client."
+            "type": "string"
           },
           "weight": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "description": "The weight of the client in pounds, rounded to the nearest pound.",
+            "type": "integer",
             "format": "int32"
           },
           "height": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "description": "The height of the client in inches, rounded to the nearest inch.",
+            "type": "integer",
             "format": "int32"
           },
           "birthDate": {
             "type": "string",
-            "description": "The date of birth of the client.",
             "format": "date-time"
           }
         },
-        "description": "Represents a client with personal information.",
         "example": {
           "id": 1,
           "firstName": "Jane",
@@ -400,39 +368,29 @@
           "Junior",
           "Senior",
           "Elite"
-        ],
-        "description": "The level of the trainer."
+        ]
       },
       "Trainer": {
         "type": "object",
         "properties": {
           "id": {
-            "pattern": "^-?(?:0|[1-9]\\d*)$",
-            "type": [
-              "integer",
-              "string"
-            ],
-            "description": "The unique identifier of the trainer, assigned by the system when the trainer is created.",
+            "type": "integer",
             "format": "int32"
           },
           "firstName": {
-            "type": "string",
-            "description": "The first name of the trainer."
+            "type": "string"
           },
           "lastName": {
-            "type": "string",
-            "description": "The last name of the trainer."
+            "type": "string"
           },
           "email": {
-            "type": "string",
-            "description": "The email address of the trainer."
+            "type": "string"
           },
           "level": {
             "$ref": "#/components/schemas/Level"
           },
           "isCertificationActive": {
-            "type": "boolean",
-            "description": "Indicates whether the trainer's certification is active."
+            "type": "boolean"
           }
         },
         "example": {

@@ -5,8 +5,6 @@ using Microsoft.AspNetCore.OpenApi;
 using Microsoft.AspNetCore.Authorization;
 using TrainingApi.Shared;
 using System.Text.Json.Nodes;
-using Microsoft.OpenApi.Models.References;
-using Microsoft.OpenApi.Models.Interfaces;
 
 public static class OpenApiTransformersExtensions
 {
@@ -17,11 +15,16 @@ public static class OpenApiTransformersExtensions
             Type = SecuritySchemeType.Http,
             Name = JwtBearerDefaults.AuthenticationScheme,
             Scheme = JwtBearerDefaults.AuthenticationScheme,
+            Reference = new()
+            {
+                Type = ReferenceType.SecurityScheme,
+                Id = JwtBearerDefaults.AuthenticationScheme
+            }
         };
         options.AddDocumentTransformer((document, context, cancellationToken) =>
         {
             document.Components ??= new();
-            document.Components.SecuritySchemes ??= new Dictionary<string, IOpenApiSecurityScheme>();
+            document.Components.SecuritySchemes ??= new Dictionary<string, OpenApiSecurityScheme>();
             document.Components.SecuritySchemes.Add(JwtBearerDefaults.AuthenticationScheme, scheme);
             return Task.CompletedTask;
         });
@@ -29,7 +32,7 @@ public static class OpenApiTransformersExtensions
         {
             if (context.Description.ActionDescriptor.EndpointMetadata.OfType<IAuthorizeData>().Any())
             {
-                operation.Security = [new() {{ new OpenApiSecuritySchemeReference(JwtBearerDefaults.AuthenticationScheme), [] }}];
+                operation.Security = [new() { [scheme] = [] }];
             }
             return Task.CompletedTask;
         });
